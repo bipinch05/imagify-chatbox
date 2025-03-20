@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { generateImage } from "../services/openai";
 import { MessageItem, Message } from "./MessageItem";
 import { toast } from "sonner";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Image } from "lucide-react";
 
 export const ChatBox: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -78,6 +78,19 @@ export const ChatBox: React.FC = () => {
     }
   };
 
+  const showExampleImage = () => {
+    const examplePrompt = "A surreal landscape with floating islands and waterfalls";
+    const aiMessage: Message = {
+      id: Date.now().toString(),
+      content: `Example: "${examplePrompt}"`,
+      isUser: false,
+      imageUrl: "https://source.unsplash.com/random/800x600/?fantasy,landscape",
+    };
+    
+    setMessages(prev => [...prev, aiMessage]);
+    toast.info("Example image displayed");
+  };
+
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex-1 overflow-y-auto p-6">
@@ -94,6 +107,13 @@ export const ChatBox: React.FC = () => {
                 Describe the image you want to create, and I'll generate it for you.
                 Try something like "a serene lake at sunset with mountains in the background"
               </p>
+              <button
+                onClick={showExampleImage}
+                className="mt-4 flex items-center justify-center mx-auto space-x-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-full hover:bg-secondary/80 transition-colors animate-fade-in delay-300"
+              >
+                <Image size={16} />
+                <span>Show Example</span>
+              </button>
             </div>
           </div>
         ) : (
